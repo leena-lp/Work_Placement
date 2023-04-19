@@ -17,6 +17,8 @@ from rest_framework.response import Response
 from rest_framework.response import Response
 
 
+from drf_spectacular.utils import extend_schema
+
 
 from django.core.mail import send_mail
 from django.conf import settings
@@ -28,12 +30,20 @@ class UserView(APIView):
     # serializer_class=RegisterSerializer
     # model=User
     # queryset=User.objects.all()
-    
+    @extend_schema(
+        request=RegisterSerializer,
+        responses={201: RegisterSerializer},
+    )
     def get(self,request,*args,**kwargs):
         qs=User.objects.all()
         serializer=RegisterSerializer(qs,many=True)
         return Response(data=serializer.data)
     
+
+    @extend_schema(
+        request=RegisterSerializer,
+        responses={201: RegisterSerializer},
+    )
     def post(self,request,*args,**kwargs):
         serializer=RegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -66,14 +76,17 @@ class UserView(APIView):
 
 
 class EmployeeView(viewsets.ModelViewSet):
+    
     serializer_class=EmployeeSerializer
+    
     model=Employee
     queryset=Employee.objects.all()
     permission_classes=[IsAuthenticated]
     http_method_names=["get"]
     
 
-
+    @extend_schema(responses=EmployeeSerializer
+    )
     def list(self, request, *args, **kwargs):
         qs=Employee.objects.filter(user=request.user)
         serializer=EmployeeSerializer(qs,many=True)
@@ -96,6 +109,7 @@ class IsAdminUser(permissions.BasePermission):
 
 class EmployeeDetailView(viewsets.ModelViewSet):
     serializer_class=EmployeeSerializer
+    
     model=Employee
     queryset=Employee.objects.all()
     permission_classes=[IsAdminUser]
@@ -107,6 +121,7 @@ class EmployeeDetailView(viewsets.ModelViewSet):
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
 
+    @extend_schema(request=None,responses=None)
     def post(self, request):
         try:
             refresh_token = request.data["refresh_token"]
