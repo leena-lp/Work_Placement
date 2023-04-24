@@ -26,7 +26,11 @@ from django.contrib.auth.models import User
 from .email import sent_details_via_email
 
 
-class UserView(APIView):
+from activity_log.mixins import ActivityLogMixin
+
+
+
+class UserView(ActivityLogMixin,APIView):
     # serializer_class=RegisterSerializer
     # model=User
     # queryset=User.objects.all()
@@ -56,6 +60,8 @@ class UserView(APIView):
             password=data.get("password")
             serializer.save()
 
+            
+
 
             print('======================================================================')
             print(email)
@@ -75,7 +81,7 @@ class UserView(APIView):
 
 
 
-class EmployeeView(viewsets.ModelViewSet):
+class EmployeeView(ActivityLogMixin,viewsets.ModelViewSet):
     
     serializer_class=EmployeeSerializer
     
@@ -107,7 +113,7 @@ class IsAdminUser(permissions.BasePermission):
 
 
 
-class EmployeeDetailView(viewsets.ModelViewSet):
+class EmployeeDetailView(ActivityLogMixin,viewsets.ModelViewSet):
     serializer_class=EmployeeSerializer
     
     model=Employee
@@ -118,7 +124,7 @@ class EmployeeDetailView(viewsets.ModelViewSet):
 
 
 
-class LogoutView(APIView):
+class LogoutView(ActivityLogMixin,APIView):
     permission_classes = (IsAuthenticated,)
 
     @extend_schema(request=None,responses=None)

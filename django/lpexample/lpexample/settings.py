@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'api',
     'drf_spectacular',
     'drf_spectacular_sidecar',
+    'activity_log',
     # 'rest_framework.authtoken',
     ]
 
@@ -166,6 +167,7 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': False
 }
 
+# ============================================================================
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -175,3 +177,13 @@ EMAIL_PORT = 587    #default email port email servers use
 EMAIL_USE_SSL = False       #security protocols
 EMAIL_HOST_USER = 'pythondrf@gmail.com'
 EMAIL_HOST_PASSWORD = 'ybtkiraqstrslvvg'
+
+
+# ===================================================================
+
+# USER_ACTIVITY_LOG = {
+#     "TRACK_SUPERUSERS": True,
+#     "IGNORE_URLS": [],
+#     "TRACK_IGNORE_STATUS_CODES": [],
+#     "TRACK_QUERY_STRING": [],
+# }
