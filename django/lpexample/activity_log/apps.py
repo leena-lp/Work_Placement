@@ -7,6 +7,6 @@ class ActivityLogConfig(AppConfig):
 
 
     def ready(self):
-        from .signals import log_user_login,log_user_login_failed
+        from activity_log import signals
 
     

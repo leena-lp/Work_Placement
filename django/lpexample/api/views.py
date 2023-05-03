@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from django.contrib.auth import logout 
 
 # Create your views here.
 
@@ -13,6 +14,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
 from rest_framework.response import Response
+
+
+from datetime import datetime
 
 from rest_framework.response import Response
 
@@ -123,17 +127,16 @@ class EmployeeDetailView(ActivityLogMixin,viewsets.ModelViewSet):
 
 
 
-
 class LogoutView(ActivityLogMixin,APIView):
     permission_classes = (IsAuthenticated,)
 
-    @extend_schema(request=None,responses=None)
     def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
+            refresh_token = request.data["refresh"]
             token = RefreshToken(refresh_token)
+            logout_time=datetime.now()
+            print(logout_time)
+            print(token)
+            
             token.blacklist()
 
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response("Successful Logout", status=status.HTTP_200_OK)
